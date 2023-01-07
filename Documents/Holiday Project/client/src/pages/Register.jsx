@@ -18,10 +18,11 @@ function Register() {
   const [nohp, setNohp] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [lastid, setLastID] = useState(0);
 
   const generateSandi = () => {
     const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let sandilength = 6;
+    let sandilength = 5;
     let password = "";
 
     for (let i = 0; i <= sandilength; i++) {
@@ -36,26 +37,23 @@ function Register() {
     const d = new Date();
     const tahun = d.getFullYear().toString();
     const bulan = (d.getMonth() + 1).toString().padStart(2, "0");
-    const pilihId = () => {
-      const id = 978;
-      if (id < 100) {
-        return id.toString().padStart(3, "0");
-      } else {
-        return id.toString();
-      }
-    };
 
-    const pilihKelas = () => {
-      const kelas = "IPA";
-      if (kelas == "IPA") {
-        return "PA";
-      } else {
-        return "PS";
-      }
-    };
-    const pilihanId = pilihId();
-    const pilihankelas = pilihKelas();
-    setNis(tahun + bulan + pilihanId + pilihankelas);
+    Axios.get("http://localhost:3002/totallist")
+      .then((res) => {
+        console.log(res.data);
+        setLastID(res.data[res.data.length - 1].id + 1);
+      })
+      .catch();
+    // const pilihKelas = () => {
+    //   if (cls == "Science") {
+    //     return "PA";
+    //   } else {
+    //     return "PS";
+    //   }
+    // };
+    // return `${tahun}${bulan}${lastid + 1}${pilihKelas}`;
+
+    setNis(tahun + bulan + lastid + cls);
   };
 
   const registStudent = () => {
